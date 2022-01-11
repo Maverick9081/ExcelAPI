@@ -3,6 +3,10 @@ const Schema = mongoose.Schema
 
 
 const dataSchema = new Schema({
+    // json: Object
+    //Was trying go Schema less(sort of) with this so it can work with all excel files but it is not fetch all the data !!
+    
+    
 DATE :{
     type: String,
   
@@ -118,7 +122,7 @@ STATE :{
 'Contract Id':{
     type: String,  
 }
-// json: Object
+
 });
 // dataSchema.set('validateBeforeSave', false);
 
