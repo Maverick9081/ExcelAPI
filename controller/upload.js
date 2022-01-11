@@ -18,13 +18,7 @@ const oAuth2Client = new google.auth.OAuth2(
 
 oAuth2Client.setCredentials({refresh_token: refreshToken})
 
-// const oAuth2Client = new google.auth.OAuth2(
-//     '576754701578-lt1bgsh9k50pjc0641nmdears16urbsc.apps.googleusercontent.com',
-//     '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',
-//     'https://developers.google.com/oauthplayground'
-// )
 
-// oAuth2Client.setCredentials({refresh_token: '1//04QDJfYH2-bCbCgYIARAAGAQSNwF-L9IrFIzk52F46cdMiRwPwvvQtX6GKxjTpseE2aIQGZIM7zzq6osZ4V0pP5GN8ZbniEASpyI'})
 
 const drive = google.drive({
     version: 'v3',
