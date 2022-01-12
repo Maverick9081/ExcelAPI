@@ -72,7 +72,11 @@ export const upload = (req,res,next) =>
     data = xlsx.readFile(req.file.path)
     const as = data.SheetNames
     const len = as.length
-
+    excelDataSchema.deleteMany({})
+    .then(result => 
+        {
+            console.log(result);
+        })
     if(len == 0) 
         {
             throw new Error('invalid Document')
