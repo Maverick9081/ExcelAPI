@@ -18,26 +18,20 @@ const fileStorage = multer.diskStorage({
     }
 })
 
-// const fileFilter = (req,file, cb) => {
-//     if(
-//         file.mimetype === 'xls' ||
-//         file.mimetype === 'xlsx' ||
-//         file.mimetype === 'xlsm'
-//     ) {
-//         cb(null,true)
-//     }
-//     else {
-//         cb(null,false)
-//     }
-// }
+const fileFilter =(res, file, cb) =>{
+    if(!file.originalname.match(/\.(xls|xlsx)$/)){
+      return cb(new Error('Please upload a excel file'));
+    }
+    cb(undefined, true)
+  }
+
 app.use('/excel', express.static(path.join(__dirname, 'excel')));
 
-app.use(multer({storage: fileStorage }).single("file"));
+app.use(multer({storage: fileStorage, fileFilter: fileFilter }).single("file"));
 
 app.use(bodyParser.json());
 
 app.post('/', uploadRoutes );
-
 
 
 mongoose
