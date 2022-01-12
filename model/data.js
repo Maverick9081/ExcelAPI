@@ -1,12 +1,16 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 const Schema = mongoose.Schema
 
 
-const dataSchema = new Schema({
-    // json: Object
-    //Was trying go Schema less(sort of) with this so it can work with all excel files but it is not fetch all the data !!
+// const dataSchema = new Schema({ any: [{}] });
+
+// const dataSchema = new Schema({
+//     json: Object
     
-    
+// })
+
+const excelDataSchema = new Schema({
+   
 DATE :{
     type: String,
   
@@ -124,6 +128,5 @@ STATE :{
 }
 
 });
-// dataSchema.set('validateBeforeSave', false);
 
-module.exports = mongoose.model('Data', dataSchema);
+export default mongoose.model('Data',excelDataSchema );
