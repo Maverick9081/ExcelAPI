@@ -2,7 +2,8 @@ const { Mongoose } = require('mongoose');
 const xlsx = require('xlsx');
 const DATA = require('../model/data');
 const { google } = require('googleapis');
-const fs = require('fs')
+const fs = require('fs');
+const { json } = require('body-parser');
 require('dotenv').config();
 
 const clientId = process.env.clientId;
@@ -55,10 +56,19 @@ async function uploadFile(file) {
 let data;
 
 exports.upload = (req,res,next) => {
+    let path;
+    if(!( path = req.file)) {
+        throw new Error('invalid file or File not uploaded')
+    }
 uploadFile(req.file.path);
  data = xlsx.readFile(req.file.path)
 const as = data.SheetNames
-for(i=0 ; i<2; i++) {
+const len = as.length
+
+if(len == 0) {
+    throw new Error('invalid Document')
+}
+for(i=0 ; i<len; i++) {
 
     const bs = as[i];
 
@@ -67,11 +77,14 @@ const ws = data.Sheets[bs]
  const Data = xlsx.utils.sheet_to_json(ws)
 
 
+
  DATA.insertMany(Data,(err,data)=>{  
     if(err){  
     console.log(err);  
     }
     
-    }); 
+    });
+  
 }
+res.send('file uploaded successfully'); 
 }
