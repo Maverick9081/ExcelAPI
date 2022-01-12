@@ -1,48 +1,59 @@
-const express = require('express');
-const multer = require('multer');
-const bodyParser = require('body-parser');
-const path = require('path');
+import express  from "express";
+import multer from "multer";
+import bodyParser from "body-parser";
+import path from "path";
+import mongoose from "mongoose";
+import { uploadRoutes } from "./routes/upload.js"
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 const app = express();
-const uploadController = require('./controller/upload');
-const uploadRoutes = require('./routes/upload');
-const { randomBytes } = require('crypto');
-const mongoose = require('mongoose');
+const mongodbURI = process.env.mongodbURI
 
 
-const fileStorage = multer.diskStorage({
-    destination: (req,file,cb) => {
+
+const fileStorage = multer.diskStorage
+  ({
+    destination: (req,file,cb) => 
+     {
         cb(null,'./excel');
-    },
-    filename: (req,file,cb) => {
+     },
+    filename: (req,file,cb) => 
+      {
         cb(null,  Date.now() +' ' + file.originalname)
-    }
-})
+      }
+  })
 
-const fileFilter =(res, file, cb) =>{
-    if(!file.originalname.match(/\.(xls|xlsx)$/)){
+const fileFilter =(res, file, cb) =>
+  {
+    if(!file.originalname.match(/\.(xls|xlsx)$/))
+     {
       return cb(new Error('Please upload a excel file'));
-    }
+     }
     cb(undefined, true)
   }
+const upload =multer({storage: fileStorage, fileFilter: fileFilter }).single("file");
+ 
 
 app.use('/excel', express.static(path.join(__dirname, 'excel')));
 
-app.use(multer({storage: fileStorage, fileFilter: fileFilter }).single("file"));
+app.use(upload);
 
 app.use(bodyParser.json());
 
-app.post('/', uploadRoutes );
+app.use(uploadRoutes);
 
 
 mongoose
-  .connect(
-    'mongodb+srv://abhi:abhi@hi.mwcxr.mongodb.net/messages?retryWrites=true&w=majority'
-  )
-  .then(result => {
+  .connect(mongodbURI)
+  .then(result => 
+    {
       console.log('connected!')
       app.listen(3000);
 
    
-  })
+    })
   .catch(err => console.log(err));
 
