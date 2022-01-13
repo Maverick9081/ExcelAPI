@@ -70,8 +70,8 @@ export const upload = (req,res,next) =>
         }
     uploadFile(req.file.path);
     data = xlsx.readFile(req.file.path)
-    const as = data.SheetNames
-    const len = as.length
+    const sheetName = data.SheetNames
+    const len = sheetName.length
     excelDataSchema.deleteMany({})
     .then(result => 
         {
@@ -81,14 +81,15 @@ export const upload = (req,res,next) =>
         {
             throw new Error('invalid Document')
         }
+
     let i;
     for(i=0 ; i<len; i++) 
     {
 
-        const bs = as[i];
-        const ws = data.Sheets[bs]
-        const Data = xlsx.utils.sheet_to_json(ws)
-        excelDataSchema.insertMany(Data,(err,data)=>
+        const sheet = sheetName[i];
+        const sheetData = data.Sheets[sheet]
+        const sheetJsonData = xlsx.utils.sheet_to_json(sheetData)
+        excelDataSchema.insertMany(sheetJsonData,(err,data)=>
             {  
                 if(err)
                     {  
